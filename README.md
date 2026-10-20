@@ -11,6 +11,13 @@ no salen del equipo.
 > anomalies (night-time entries, rejection bursts) and a downloadable report.
 > No backend: data never leaves the machine. MIT licensed.
 
+## Capturas (reales)
+
+Sitio publicado en GitHub Pages: https://esvindal.github.io/analizador-de-accesos/
+
+![App en escritorio](capturas/app-1440.png)
+<img src="capturas/app-390.png" width="320" alt="App en móvil">
+
 ## Uso
 
 Abrí `index.html` en el navegador (o servilo con GitHub Pages). Columnas
