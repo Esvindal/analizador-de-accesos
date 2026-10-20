@@ -1,0 +1,154 @@
+/* analizador-de-accesos — herramienta sobria de seguridad */
+:root {
+  --fondo: #f2f5f8;
+  --superficie: #ffffff;
+  --borde: #d8e0e8;
+  --navy: #14213d;
+  --tinta: #22303f;
+  --tinta-2: #5d6b7a;
+  --acero: #3a6ea5;
+  --peligro: #b23730;
+  --peligro-suave: #f9e8e6;
+  --ok: #1a6b4a;
+  --mono: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --sans: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--fondo);
+  color: var(--tinta);
+  font-family: var(--sans);
+  font-size: 1rem;
+  line-height: 1.55;
+}
+::selection { background: var(--acero); color: #fff; }
+.contenedor { max-width: 76ch; margin-inline: auto; padding-inline: 1.25rem; }
+
+.saltar {
+  position: absolute; left: -999px; top: 0;
+  background: var(--navy); color: #fff; padding: .5rem 1rem;
+  border-radius: 0 0 8px 0; z-index: 10;
+}
+.saltar:focus { left: 0; }
+:focus-visible { outline: 2px solid var(--acero); outline-offset: 3px; border-radius: 4px; }
+a { color: var(--acero); text-underline-offset: 3px; }
+code, pre { font-family: var(--mono); font-size: .9em; }
+code { background: #e9eef4; padding: .08em .3em; border-radius: 4px; }
+pre {
+  background: var(--navy); color: #dfe8f2; padding: .9rem 1rem;
+  border-radius: 10px; overflow-x: auto; font-size: .85rem;
+}
+
+/* ---- header ---- */
+.top { background: var(--navy); color: #fff; }
+.top-fila { display: flex; align-items: baseline; gap: 1rem; padding-block: .9rem; flex-wrap: wrap; }
+.marca { font-family: var(--mono); font-weight: 600; font-size: 1rem; }
+.marca::before { content: "▣ "; color: #7fb3e0; }
+.marca-nota { color: #a8bdd4; font-size: .88rem; }
+
+/* ---- intro ---- */
+.intro { padding-block: 2.4rem 1.4rem; }
+.intro h1 { font-size: clamp(1.7rem, 4.5vw, 2.4rem); letter-spacing: -.02em; margin: 0 0 .8rem; color: var(--navy); }
+.intro p { color: var(--tinta-2); max-width: 64ch; margin: 0; }
+
+/* ---- carga ---- */
+.carga { display: flex; gap: 1.5rem; align-items: stretch; flex-wrap: wrap; }
+.drop {
+  flex: 1 1 320px;
+  border: 2px dashed var(--borde); border-radius: 14px;
+  background: var(--superficie);
+  display: grid; place-content: center; justify-items: center; gap: .4rem;
+  padding: 2.2rem 1.5rem; text-align: center;
+  transition: border-color .15s ease, background .15s ease;
+}
+.drop.sobre { border-color: var(--acero); background: #eef4fa; }
+.drop p { margin: 0; color: var(--tinta-2); }
+#archivo { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.carga-lateral { flex: 1 1 240px; display: grid; gap: .8rem; align-content: center; }
+.carga-lateral details { font-size: .92rem; color: var(--tinta-2); }
+.carga-lateral summary { cursor: pointer; font-weight: 600; color: var(--tinta); }
+.marca-ejemplo {
+  margin: 0; font-size: .88rem; color: #8a6a1d;
+  background: #f6ecd4; border: 1px solid #e2d0a0;
+  padding: .5rem .8rem; border-radius: 8px;
+}
+
+.boton {
+  display: inline-block;
+  background: var(--acero); color: #fff; border: 0; cursor: pointer;
+  font: inherit; font-weight: 600; text-decoration: none;
+  padding: .6rem 1.2rem; border-radius: 10px;
+  transition: background .15s ease, transform .15s ease;
+}
+.boton:hover { background: #2d5785; transform: translateY(-1px); }
+.boton-sec { background: var(--navy); }
+.boton-sec:hover { background: #1d3155; }
+
+/* ---- errores ---- */
+.errores {
+  margin-top: 1.2rem;
+  background: var(--peligro-suave);
+  border: 1px solid color-mix(in srgb, var(--peligro) 35%, transparent);
+  border-radius: 10px; padding: .8rem 1.1rem; color: var(--peligro);
+  font-size: .95rem;
+}
+.errores ul { margin: 0; padding-inline-start: 1.2rem; }
+
+/* ---- resultados ---- */
+#resultados { padding-block: 1.6rem 2.5rem; }
+.origen { color: var(--tinta-2); font-size: .92rem; margin: 0 0 1rem; }
+.origen span { font-family: var(--mono); }
+
+.metricas { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.6rem; }
+.metrica {
+  flex: 1 1 130px;
+  background: var(--superficie); border: 1px solid var(--borde);
+  border-radius: 12px; padding: .9rem 1.1rem;
+  display: grid; gap: .1rem;
+}
+.metrica-num { font-family: var(--mono); font-size: 1.7rem; font-weight: 500; color: var(--navy); font-variant-numeric: tabular-nums; }
+.metrica-etq { color: var(--tinta-2); font-size: .88rem; }
+.metrica-rechazo .metrica-num { color: var(--peligro); }
+
+.grillas { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+@media (max-width: 700px) { .grillas { grid-template-columns: 1fr; } }
+
+.panel {
+  background: var(--superficie); border: 1px solid var(--borde);
+  border-radius: 14px; padding: 1.1rem 1.2rem; margin-bottom: 1.2rem;
+}
+.panel h2 { font-size: 1.05rem; margin: 0 0 .9rem; color: var(--navy); }
+.estado { color: var(--tinta-2); margin: 0; }
+
+/* barras */
+.barras { display: grid; gap: 3px; }
+.barra-fila { display: grid; grid-template-columns: 3.2rem 1fr 2.6rem; gap: .6rem; align-items: center; }
+.barra-etq { font-family: var(--mono); font-size: .75rem; color: var(--tinta-2); text-align: right; }
+.barra-pista { background: #e9eef4; border-radius: 4px; height: .85rem; overflow: hidden; }
+.barra-relleno { display: block; height: 100%; background: var(--acero); border-radius: 4px; min-width: 1px; }
+.barra-num { font-family: var(--mono); font-size: .75rem; color: var(--tinta); font-variant-numeric: tabular-nums; }
+
+/* tablas */
+table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+th, td { text-align: left; padding: .45rem .6rem; border-bottom: 1px solid var(--borde); }
+th { color: var(--tinta-2); font-weight: 500; font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; }
+td:nth-child(2), td:nth-child(3), td:nth-child(4) { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+#tabla-anomalias td:nth-child(2) { font-family: var(--sans); }
+#tabla-anomalias td:first-child, #tabla-repetidos td:last-child {
+  white-space: nowrap; font-size: .82rem;
+}
+
+.acciones { margin-top: .5rem; }
+
+/* ---- footer ---- */
+.pie { border-top: 1px solid var(--borde); padding-block: 1.4rem; color: var(--tinta-2); font-size: .9rem; }
+
+@media (max-width: 560px) {
+  .drop { padding: 1.6rem 1rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .boton, .drop { transition: none; }
+}

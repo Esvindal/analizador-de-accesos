@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>analizador-de-accesos — análisis de eventos de acceso en el navegador</title>
+<meta name="description" content="Herramienta local: subí un CSV de eventos de acceso y obtené horas pico, rechazos repetidos, anomalías y un informe descargable. Sin backend: los datos no salen de tu equipo.">
+<link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+
+<header class="top">
+  <div class="contenedor top-fila">
+    <span class="marca">analizador-de-accesos</span>
+    <span class="marca-nota">herramienta local — tus datos no salen del equipo</span>
+  </div>
+</header>
+
+<main id="contenido" class="contenedor">
+  <section class="intro">
+    <h1>Análisis de eventos de acceso</h1>
+    <p>Subí un CSV con las columnas
+    <code>fecha,punto,identificador,resultado,tipo</code> y obtené horas pico,
+    rechazos repetidos y anomalías, con un informe descargable. Todo se procesa
+    en tu navegador: <strong>nada se sube a ningún servidor</strong>.</p>
+  </section>
+
+  <section class="carga" aria-label="Carga de datos">
+    <div id="drop" class="drop">
+      <p><strong>Arrastrá tu CSV acá</strong> o</p>
+      <label class="boton" for="archivo">Elegir archivo…</label>
+      <input id="archivo" type="file" accept=".csv,text/csv">
+    </div>
+    <div class="carga-lateral">
+      <button id="btn-ejemplo" class="boton boton-sec" type="button">Cargar datos de ejemplo</button>
+      <p id="marca-ejemplo" class="marca-ejemplo" hidden>Datos <strong>generados</strong>:
+      500 eventos sintéticos, no reales.</p>
+      <details>
+        <summary>Formato esperado</summary>
+        <pre>fecha,punto,identificador,resultado,tipo
+2026-10-20 08:15:32,porton-vehicular,cred-0042,permitido,tarjeta
+2026-10-20 03:02:11,deposito,cred-0010,rechazado,huella</pre>
+      </details>
+    </div>
+  </section>
+
+  <div id="errores" class="errores" role="alert" hidden></div>
+
+  <section id="resultados" hidden>
+    <p class="origen">Origen: <span id="origen-datos"></span></p>
+
+    <div class="metricas" role="list">
+      <div class="metrica" role="listitem"><span class="metrica-num" id="m-total">0</span><span class="metrica-etq">eventos</span></div>
+      <div class="metrica" role="listitem"><span class="metrica-num" id="m-permitidos">0</span><span class="metrica-etq">permitidos</span></div>
+      <div class="metrica metrica-rechazo" role="listitem"><span class="metrica-num" id="m-rechazados">0</span><span class="metrica-etq">rechazados</span></div>
+      <div class="metrica" role="listitem"><span class="metrica-num" id="m-pct">0%</span><span class="metrica-etq">% rechazo</span></div>
+    </div>
+
+    <div class="grillas">
+      <section class="panel">
+        <h2>Eventos por hora del día</h2>
+        <div id="graf-hora"></div>
+      </section>
+      <section class="panel">
+        <h2>Eventos por día de la semana</h2>
+        <div id="graf-dia"></div>
+      </section>
+    </div>
+
+    <section class="panel">
+      <h2>Rechazo por punto de acceso</h2>
+      <div id="tabla-puntos"></div>
+    </section>
+
+    <div class="grillas">
+      <section class="panel">
+        <h2>Rechazos repetidos</h2>
+        <div id="tabla-repetidos"></div>
+      </section>
+      <section class="panel">
+        <h2>Anomalías</h2>
+        <div id="tabla-anomalias"></div>
+      </section>
+    </div>
+
+    <div class="acciones">
+      <button id="btn-informe" class="boton" type="button">Descargar informe (.md)</button>
+    </div>
+  </section>
+</main>
+
+<footer class="pie">
+  <div class="contenedor">
+    <p>Demo funcional: análisis de CSV 100% en el navegador. Los datos de
+    ejemplo son generados. Licencia MIT.</p>
+  </div>
+</footer>
+
+<script src="js/csv-parse.js"></script>
+<script src="js/analisis.js"></script>
+<script src="js/ejemplo.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
